@@ -5,7 +5,7 @@
 <img src="demos/demo-slow.gif" width="700px" />
 
 
-## Fast install (default, parallel install on)
+## Fast install (default, parallel cloning on)
 
 <img src="demos/demo-fast.gif" width="700px" />
 
