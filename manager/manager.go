@@ -3,7 +3,6 @@ package manager
 
 import (
 	"flag"
-	"maps"
 
 	"github.com/SergeyDarn/git-repos-manager/utils"
 	"github.com/charmbracelet/log"
@@ -48,11 +47,7 @@ func Init(logLevel log.Level) {
 		return
 	}
 
-	configJSON := ReadConfigJSON()
-	dependencies := configJSON.Dependencies
-	maps.Copy(dependencies, configJSON.DevDependencies)
-
-	for key, value := range dependencies {
+	for key, value := range ReadConfigJSON().Repositories {
 		if utils.IsGitURL(value) {
 			reposMap[key] = value
 		}

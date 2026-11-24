@@ -1,0 +1,10 @@
+{
+    "repositories": {
+        "storefront-query-builder": "https://github.com/DivanteLtd/storefront-query-builder.git",
+        "test": "git@github.com:SergeyDarn/test-module-js.git#5d62004178df760fd8978ef166e9ab14d23b06d1",
+        "test-versioned-ssh17": "git@github.com:SergeyDarn/test-module-js.git",
+        "test-versioned-sshdev": "git@github.com:SergeyDarn/test-module-js.git#dev",
+        "test-versioned-sshtag": "git@github.com:SergeyDarn/test-module-js.git#1.0.0",
+        "storefront-query-builder34": "https://github.com/DivanteLtd/storefront-query-builder.git"
+    }
+}

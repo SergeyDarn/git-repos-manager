@@ -14,8 +14,7 @@ import (
 )
 
 type JSONConfig struct {
-	Dependencies    map[string]string
-	DevDependencies map[string]string
+	Repositories map[string]string
 }
 
 var reposDirPermissions os.FileMode = 0o777

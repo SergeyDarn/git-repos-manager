@@ -19,7 +19,7 @@
 
 ## How it works
 
-1. The list of git repositories to clone is read from the config file (`package.json` by default, can be changed) from `dependencies` and `devDependencies` fields. This format was chosen for compatibility with javascript's `package.json` file format.
+1. The list of git repositories to clone is read from the config file (`repos-manager-config.json` by default, can be changed) from the `repositories` field.
 2. All git repositories are cloned into the specified folder (`src/repos` by default, can be changed)
 3. Before cloning a repo, the local folder with this repo is deleted if it exists. 
 4. If a repository has unsaved changes, it is skipped so you won't lose any changes
@@ -27,51 +27,49 @@
 
 ## How to use
 
-> If you're on mac, you can just use already compiled `build/repo-manager` file from this repo.
+> If you're on mac, you can just use already compiled `build/repos-manager` file from this repo.
 > If you're not on mac:
 > 1. Clone this repo
 > 2. Install go
-> 3. Run `go build -o build/repo-manger` inside the cloned repo to generate a compiled file for your operating system (instead of `repo-manager` you can use any filename)
+> 3. Run `go build -o build/repos-manger` inside the cloned repo to generate a compiled file for your operating system (instead of `repo-manager` you can use any filename)
 
-1. Copy the `repo-manager` file that contains the app from `build` directory to the place where you want to manage multiple git repositories.
+1. Copy the `repos-manager` file that contains the app from `build` directory to the place where you want to manage multiple git repositories.
 2. Copy `.env` file from this repository to the same place. It contains the environment variables required for the app to run.
 3. You can change any environment variables you want in `.env` + the app also reads a file `.env.local`
 4. `!Important!` If you're cloning git repositories with ssh - set the path to your ssh key in the env config file.
-5. Create `package.json` with the list of your git repositories (an example of the config file is available few headers lower) 
-6. Run the app to clone all your git repositories: `./repo-manager`
+5. Create `repos-manager-config.json` with the list of your git repositories (an example of the config file is available few headers below) 
+6. Run the app to clone all your git repositories: `./repos-manager`
 
 ### Final file structure in your project:
-`repo-manager`<br>
-`package.json`<br>
+`repos-manager`<br>
+`repos-manager-config.json`<br>
 `.env`<br>
 `.env.local` (optional)<br>
 
 ## `.env` config example
 
 ```.env
-CONFIG_FILE="package.json"
+CONFIG_FILE="repos-manager-config.json"
 REPOS_DIR="src/repos"
 SSH_KEY_PATH="/Users/your_username/.ssh/id_rsa"
 SSH_KEY_PASSWORD=""
 ```
 
-`CONFIG_FILE` - the name of the JSON file from which the list of git repositories to clone is read. Inside, the fields `dependencies` and `devDependencies` are used (for compatibility with standart package.json format)<br><br>
+`CONFIG_FILE` - the name of the JSON file from which the list of git repositories to clone is read. Inside, the field `repositories` is used <br><br>
 `REPOS_DIR` - relative path to the directory to which git repositories will be cloned. Don't forget to add it to `.gitignore`<br><br>
 `SSH_KEY_PATH` - absolute(!) path to your local private ssh key<br>
 `SSH_KEY_PASSWORD` - your ssh key password (if there's none - leave empty)<br>
 
-## `package.json` config example
+## `repos-manager-config.json` config example
 
 ```json
 {
-   "devDependencies": {
+   "repositories": {
       "test": "git@github.com:SergeyDarn/test-module-js.git",
       "storefront-query-builder": "https://github.com/DivanteLtd/storefront-query-builder.git",
-   },
-   "dependencies": {
       "scrape-search-ai": "https://github.com/SergeyDarn/scrape-search-ai#dev",
       "magnific-popup": "git@github.com:SergeyDarn/Magnific-Popup.git#1.8.0",
-      "Course_Bash": "git@github.com:SergeyDarn/Course_Bash-Programming.git#3a7a19020151b45a29896c9142723efe5b11a061",
+      "Course_Bash": "git@github.com:SergeyDarn/Course_Bash-Programming.git#3a7a19020151b45a29896c9142723efe5b11a061"
    }
 }
 ```
@@ -86,17 +84,17 @@ SSH_KEY_PASSWORD=""
 
 ```bash
     # Help. List all available commands
-    ./repo-manager -h
+    ./repos-manager -h
     # Run the app
-    ./repo-manager 
+    ./repos-manager 
     # Run the app without cloning repositories in parallel. Much slower, but better log readability.
-    ./repo-manager --parallel-cloning=false
+    ./repos-manager --parallel-cloning=false
     # Forcibly delete the whole directory with your git repositories before running the app.
-    ./repo-manager --safe=false 
+    ./repos-manager --safe=false 
     # See the list of git repositories that have unsaved local changes. No repositories are cloned when using this flag
-    ./repo-manager --status
+    ./repos-manager --status
     # Perform git pull for all repositories
-    ./repo-manager --pull
+    ./repos-manager --pull
 ```
 
 ## Usage as a go module
