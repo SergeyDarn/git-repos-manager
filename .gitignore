@@ -1,11 +1,3 @@
-.vscode/
-.yarn/*
-node_modules/
-
-go.env.local
-
-test-module-js
+.env.local
 src/
-yarn.lock
 package.json
-.yarnrc.yml
