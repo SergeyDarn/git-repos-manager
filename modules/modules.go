@@ -24,9 +24,9 @@ func getModulesDir() string {
 	return utils.GetModulesDir()
 }
 
-func ReadConfigJson() JsonConfig {
+func ReadConfigJSON() JsonConfig {
 	configFile := utils.GetConfigFile()
-	return utils.ReadJson[JsonConfig](configFile)
+	return utils.ReadJSON[JsonConfig](configFile)
 }
 
 func CreateModulesDir() {
@@ -73,7 +73,7 @@ func InstallModules(modules map[string]string, parallelInstall bool) {
 }
 
 func installModule(moduleName string, moduleUrl string) {
-	if !utils.IsGitUrl(moduleUrl) {
+	if !utils.IsGitURL(moduleUrl) {
 		return
 	}
 

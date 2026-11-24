@@ -1,3 +1,4 @@
+// Package utils provides a collection of useful general utilities
 package utils
 
 import (
@@ -114,13 +115,13 @@ func ColorWarningf(text string, args ...any) string {
 	return ColorTextf(text, warningColor, args...)
 }
 
-func ReadJson[T any](file string) T {
+func ReadJSON[T any](file string) T {
 	configJson, fileErr := os.ReadFile(file)
 	CheckError(fileErr, "error when opening json configuration file")
 
-	var configJsonParsed T
-	jsonErr := json.Unmarshal(configJson, &configJsonParsed)
+	var configJSONParsed T
+	jsonErr := json.Unmarshal(configJson, &configJSONParsed)
 	CheckError(jsonErr, "error when parsing json configuration file")
 
-	return configJsonParsed
+	return configJSONParsed
 }

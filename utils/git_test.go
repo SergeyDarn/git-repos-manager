@@ -26,7 +26,7 @@ func TestIsGitUrl(t *testing.T) {
 		testName := test.url
 
 		t.Run(testName, func(t *testing.T) {
-			res := IsGitUrl(test.url)
+			res := IsGitURL(test.url)
 
 			if res != test.want {
 				t.Errorf("Expected %t, but got %t", test.want, res)
@@ -37,7 +37,7 @@ func TestIsGitUrl(t *testing.T) {
 
 func TestParseGitUrl(t *testing.T) {
 	type want struct {
-		cleanUrl   string
+		cleanURL   string
 		commitHash string
 		branch     plumbing.ReferenceName
 		tag        plumbing.ReferenceName
@@ -46,53 +46,53 @@ func TestParseGitUrl(t *testing.T) {
 
 	tests := []struct {
 		name   string
-		gitUrl string
+		gitURL string
 		want   want
 	}{
 		{"Not a git url", "htts://google.com/", want{}},
 		{"No reference http url", "https://github.com/SergeyDarn/scrape-search-ai.git", want{
-			cleanUrl: "https://github.com/SergeyDarn/scrape-search-ai.git",
+			cleanURL: "https://github.com/SergeyDarn/scrape-search-ai.git",
 		}},
 		{"No reference ssh url", "git@github.com:SergeyDarn/scrape-search-ai.git", want{
-			cleanUrl: "git@github.com:SergeyDarn/scrape-search-ai.git",
+			cleanURL: "git@github.com:SergeyDarn/scrape-search-ai.git",
 		}},
 
 		{"Branch 1", "git@github.com:SergeyDarn/scrape-search-ai.git#1", want{
-			cleanUrl: "git@github.com:SergeyDarn/scrape-search-ai.git",
+			cleanURL: "git@github.com:SergeyDarn/scrape-search-ai.git",
 			branch:   plumbing.NewBranchReferenceName("1"),
 		}},
 		{"Branch 123", "git@github.com:SergeyDarn/scrape-search-ai.git#123", want{
-			cleanUrl: "git@github.com:SergeyDarn/scrape-search-ai.git",
+			cleanURL: "git@github.com:SergeyDarn/scrape-search-ai.git",
 			branch:   plumbing.NewBranchReferenceName("123"),
 		}},
 		{"Branch dev", "git@github.com:SergeyDarn/scrape-search-ai.git#dev", want{
-			cleanUrl: "git@github.com:SergeyDarn/scrape-search-ai.git",
+			cleanURL: "git@github.com:SergeyDarn/scrape-search-ai.git",
 			branch:   plumbing.NewBranchReferenceName("dev"),
 		}},
 
 		{"Branch blablabla2", "git@github.com:SergeyDarn/scrape-search-ai.git#blablabla2", want{
-			cleanUrl: "git@github.com:SergeyDarn/scrape-search-ai.git",
+			cleanURL: "git@github.com:SergeyDarn/scrape-search-ai.git",
 			branch:   plumbing.NewBranchReferenceName("blablabla2"),
 		}},
 		{"Commit Hash", "git@github.com:SergeyDarn/scrape-search-ai.git#b7620f64a115b85eca08504cb9b364e594c9f8df", want{
-			cleanUrl:   "git@github.com:SergeyDarn/scrape-search-ai.git",
+			cleanURL:   "git@github.com:SergeyDarn/scrape-search-ai.git",
 			commitHash: "b7620f64a115b85eca08504cb9b364e594c9f8df",
 		}},
 
 		{"Tag 1.4.0", "git@github.com:SergeyDarn/scrape-search-ai.git#1.4.0", want{
-			cleanUrl: "git@github.com:SergeyDarn/scrape-search-ai.git",
+			cleanURL: "git@github.com:SergeyDarn/scrape-search-ai.git",
 			tag:      plumbing.NewTagReferenceName("1.4.0"),
 		}},
 		{"Tag 1.5", "git@github.com:SergeyDarn/scrape-search-ai.git#1.5", want{
-			cleanUrl: "git@github.com:SergeyDarn/scrape-search-ai.git",
+			cleanURL: "git@github.com:SergeyDarn/scrape-search-ai.git",
 			tag:      plumbing.NewTagReferenceName("1.5"),
 		}},
 		{"Tag 1.10.0.1", "git@github.com:SergeyDarn/scrape-search-ai.git#1.10.0.1", want{
-			cleanUrl: "git@github.com:SergeyDarn/scrape-search-ai.git",
+			cleanURL: "git@github.com:SergeyDarn/scrape-search-ai.git",
 			tag:      plumbing.NewTagReferenceName("1.10.0.1"),
 		}},
 		{"Tag 1.2.3_fix", "git@github.com:SergeyDarn/scrape-search-ai.git#1.2.3_fix", want{
-			cleanUrl: "git@github.com:SergeyDarn/scrape-search-ai.git",
+			cleanURL: "git@github.com:SergeyDarn/scrape-search-ai.git",
 			tag:      plumbing.NewTagReferenceName("1.2.3_fix"),
 		}},
 
@@ -113,15 +113,15 @@ func TestParseGitUrl(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			if test.want.error {
-				TestPanic(t, test.name, func() { parseGitUrl(test.gitUrl) })
+				TestPanic(t, test.name, func() { parseGitURL(test.gitURL) })
 				return
 			}
 
-			cleanUrl, commitHash, branch, tag := parseGitUrl(test.gitUrl)
+			cleanURL, commitHash, branch, tag := parseGitURL(test.gitURL)
 			fail := false
 
-			if cleanUrl != test.want.cleanUrl {
-				t.Logf("Expected cleanUrl %s, but got %s", test.want.cleanUrl, cleanUrl)
+			if cleanURL != test.want.cleanURL {
+				t.Logf("Expected cleanUrl %s, but got %s", test.want.cleanURL, cleanURL)
 				fail = true
 			}
 
@@ -150,7 +150,7 @@ func TestParseGitUrl(t *testing.T) {
 type gitCloneTest struct {
 	name     string
 	repoName string
-	gitUrl   string
+	gitURL   string
 	want     gitCloneWant
 }
 
@@ -219,13 +219,13 @@ func testGitClone(t *testing.T, test gitCloneTest, testDir string) {
 
 	if test.want.error {
 		TestPanic(t, test.name, func() {
-			GitClone(test.repoName, test.gitUrl, repoDir)
+			GitClone(test.repoName, test.gitURL, repoDir)
 		})
 
 		return
 	}
 
-	GitClone(test.repoName, test.gitUrl, repoDir)
+	GitClone(test.repoName, test.gitURL, repoDir)
 
 	_, err := os.Stat(repoDir)
 	CheckTestError(t, err)

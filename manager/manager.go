@@ -1,3 +1,4 @@
+// Package manager provides the core application logic
 package manager
 
 import (
@@ -48,12 +49,12 @@ func Init(logLevel log.Level) {
 		return
 	}
 
-	configJson := modules.ReadConfigJson()
-	dependencies := configJson.Dependencies
-	maps.Copy(dependencies, configJson.DevDependencies)
+	configJSON := modules.ReadConfigJSON()
+	dependencies := configJSON.Dependencies
+	maps.Copy(dependencies, configJSON.DevDependencies)
 
 	for key, value := range dependencies {
-		if utils.IsGitUrl(value) {
+		if utils.IsGitURL(value) {
 			modulesMap[key] = value
 		}
 	}

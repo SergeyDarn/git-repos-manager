@@ -14,8 +14,8 @@ import (
 )
 
 const (
-	gitUrlSeparator = "#"
-	gitNormalUrl    = "http"
+	gitURLSeparator = "#"
+	gitNormalURL    = "http"
 	tagRegexp       = `\d(\..*)+`
 )
 
@@ -29,25 +29,25 @@ const (
 
 func GitClone(
 	repoName string,
-	repoUrl string,
+	repoURL string,
 	repoDirPath string,
 ) {
 	repoLog := ColorTextf("repo=%s", repoColor, repoName)
-	urlLog := ColorTextf("url=%s", urlColor, repoUrl)
+	urlLog := ColorTextf("url=%s", urlColor, repoURL)
 	log.Debugf("cloning %s %s", repoLog, urlLog)
 
-	cleanModuleUrl, commitHash, branch, tag := parseGitUrl(repoUrl)
+	cleanModuleURL, commitHash, branch, tag := parseGitURL(repoURL)
 	reference := branch
 	if tag != "" {
 		reference = tag
 	}
 
 	options := &git.CloneOptions{
-		URL:           cleanModuleUrl,
+		URL:           cleanModuleURL,
 		ReferenceName: reference,
 	}
 
-	auth := getGitAuth(repoUrl)
+	auth := getGitAuth(repoURL)
 	if auth != nil {
 		options.Auth = auth
 	}
@@ -111,13 +111,13 @@ func GitPull(dirPath string) {
 		return
 	}
 
-	remoteUrl := remotes[0].Config().URLs[0]
+	remoteURL := remotes[0].Config().URLs[0]
 	branchName := head.Name().Short()
 
 	authOptions := &git.PullOptions{
 		ReferenceName: plumbing.NewBranchReferenceName(branchName),
 	}
-	auth := getGitAuth(remoteUrl)
+	auth := getGitAuth(remoteURL)
 	if auth != nil {
 		authOptions.Auth = auth
 	}
@@ -157,7 +157,7 @@ func GitCheckoutToCommit(
 	log.Debugf("sucessful checkout for %s to %s", repoColorLog, commitColorLog)
 }
 
-func IsGitUrl(url string) bool {
+func IsGitURL(url string) bool {
 	return strings.Contains(url, "git")
 }
 
@@ -205,32 +205,32 @@ func GetHeadTag(repo *git.Repository) *plumbing.Reference {
 }
 
 // Returns cleanUrl, commitHash, branch, tag
-func parseGitUrl(gitUrl string) (
+func parseGitURL(gitURL string) (
 	string,
 	string,
 	plumbing.ReferenceName,
 	plumbing.ReferenceName,
 ) {
-	if !IsGitUrl(gitUrl) {
+	if !IsGitURL(gitURL) {
 		return "", "", "", ""
 	}
 
-	splitUrl := strings.Split(gitUrl, gitUrlSeparator)
-	cleanUrl := splitUrl[0]
-	hasReference := len(splitUrl) > 1
+	splitURL := strings.Split(gitURL, gitURLSeparator)
+	cleanURL := splitURL[0]
+	hasReference := len(splitURL) > 1
 
 	if !hasReference {
-		return cleanUrl, "", "", ""
+		return cleanURL, "", "", ""
 	}
 
-	if (splitUrl[1] == "") || (len(splitUrl) > 2) {
-		ThrowErrorf("cannot properly parse url %s. aborting", gitUrl)
+	if (splitURL[1] == "") || (len(splitURL) > 2) {
+		ThrowErrorf("cannot properly parse url %s. aborting", gitURL)
 	}
 
-	baseReference := splitUrl[1]
+	baseReference := splitURL[1]
 	commitHash, branch, tag := prepareGitReference(baseReference)
 
-	return cleanUrl, commitHash, branch, tag
+	return cleanURL, commitHash, branch, tag
 }
 
 // Returns commitHash, branch, tag
@@ -273,8 +273,8 @@ func prepareGitReference(baseReference string) (
 	return commitHash, branch, tag
 }
 
-func getGitAuth(repoUrl string) *ssh.PublicKeys {
-	if strings.Contains(repoUrl, gitNormalUrl) {
+func getGitAuth(repoURL string) *ssh.PublicKeys {
+	if strings.Contains(repoURL, gitNormalURL) {
 		return nil
 	}
 
