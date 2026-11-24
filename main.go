@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/SergeyDarn/easy-modules-manager/manager"
+	"github.com/SergeyDarn/git-repos-manager/manager"
 	"github.com/charmbracelet/log"
 )
 

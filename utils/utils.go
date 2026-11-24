@@ -116,11 +116,11 @@ func ColorWarningf(text string, args ...any) string {
 }
 
 func ReadJSON[T any](file string) T {
-	configJson, fileErr := os.ReadFile(file)
+	configJSON, fileErr := os.ReadFile(file)
 	CheckError(fileErr, "error when opening json configuration file")
 
 	var configJSONParsed T
-	jsonErr := json.Unmarshal(configJson, &configJSONParsed)
+	jsonErr := json.Unmarshal(configJSON, &configJSONParsed)
 	CheckError(jsonErr, "error when parsing json configuration file")
 
 	return configJSONParsed

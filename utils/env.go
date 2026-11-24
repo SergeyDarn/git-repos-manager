@@ -12,45 +12,45 @@ type EnvVariable int
 const (
 	envRoot EnvVariable = iota
 	envConfigFile
-	envModulesDir
-	envSshKeyPath
-	envSshKeyPassword
+	envReposDir
+	envSSHKeyPath
+	envSSHKeyPassword
 )
 
 var envMap = map[EnvVariable]string{
 	envRoot:           "ENV_ROOT",
 	envConfigFile:     "CONFIG_FILE",
-	envModulesDir:     "MODULES_DIR",
-	envSshKeyPath:     "SSH_KEY_PATH",
-	envSshKeyPassword: "SSH_KEY_PASSWORD",
+	envReposDir:       "REPOS_DIR",
+	envSSHKeyPath:     "SSH_KEY_PATH",
+	envSSHKeyPassword: "SSH_KEY_PASSWORD",
 }
 
 func InitEnv() {
 	envRoot := getEnv(envRoot)
 
-	err := godotenv.Load(filepath.Join(envRoot, "go.env.local"))
+	err := godotenv.Load(filepath.Join(envRoot, ".env.local"))
 	if err != nil {
-		LogWarning("fyi: couldn't open go.env.local")
+		LogWarning("fyi: couldn't open .env.local")
 	}
 
-	err = godotenv.Load(filepath.Join(envRoot, "go.env"))
-	CheckError(err, "error loading go.env file")
+	err = godotenv.Load(filepath.Join(envRoot, ".env"))
+	CheckError(err, "error loading .env file")
 }
 
-func GetModulesDir() string {
-	return getEnv(envModulesDir)
+func GetReposDir() string {
+	return getEnv(envReposDir)
 }
 
 func GetConfigFile() string {
 	return getEnv(envConfigFile)
 }
 
-func GetSshKeyPath() string {
-	return getEnv(envSshKeyPath)
+func GetSSHKeyPath() string {
+	return getEnv(envSSHKeyPath)
 }
 
-func GetSshKeyPassword() string {
-	return getEnv(envSshKeyPassword)
+func GetSSHKeyPassword() string {
+	return getEnv(envSSHKeyPassword)
 }
 
 func getEnv(env EnvVariable) string {

@@ -5,27 +5,26 @@ import (
 	"flag"
 	"maps"
 
-	"github.com/SergeyDarn/easy-modules-manager/modules"
-	"github.com/SergeyDarn/easy-modules-manager/utils"
+	"github.com/SergeyDarn/git-repos-manager/utils"
 	"github.com/charmbracelet/log"
 )
 
-type ModulesMap map[string]string
+type ReposMap map[string]string
 
-var modulesMap = ModulesMap{}
+var reposMap = ReposMap{}
 
-func (m ModulesMap) ToSlice() []string {
-	var modules []string
+func (m ReposMap) ToSlice() []string {
+	var repos []string
 
 	for name := range m {
-		modules = append(modules, name)
+		repos = append(repos, name)
 	}
 
-	return modules
+	return repos
 }
 
-func GetModulesMap() ModulesMap {
-	return modulesMap
+func GetReposMap() ReposMap {
+	return reposMap
 }
 
 func Init(logLevel log.Level) {
@@ -33,41 +32,41 @@ func Init(logLevel log.Level) {
 
 	utils.InitEnv()
 
-	showChangedModules := flag.Bool("status", false, "show modules with unsaved git changes")
-	pullModules := flag.Bool("pull", false, "perform git pull for all modules")
-	parallelInstall := flag.Bool("parallel-install", true, "install modules in parallel (true/false)")
-	safeInstall := flag.Bool("safe-install", true, "if this is set to false, modules folder will be deleted on start. Default version - each module is checked separately, and only if module has no unsaved changes, it's deleted and then reinstalled")
+	showReposStatus := flag.Bool("status", false, "show repos with unsaved git changes")
+	pullRepos := flag.Bool("pull", false, "perform git pull for all repos")
+	parallelInstall := flag.Bool("parallel-install", true, "clone repos in parallel (true/false)")
+	safeInstall := flag.Bool("safe-install", true, "if this is set to false, repos folder will be deleted on start. Default version - each repo is checked separately, and only if repos has no unsaved changes, it's deleted and then recloned")
 	flag.Parse()
 
-	if *showChangedModules {
-		modules.ShowChangedModules()
+	if *showReposStatus {
+		ShowReposStatus()
 		return
 	}
 
-	if *pullModules {
-		modules.PullModules()
+	if *pullRepos {
+		PullRepos()
 		return
 	}
 
-	configJSON := modules.ReadConfigJSON()
+	configJSON := ReadConfigJSON()
 	dependencies := configJSON.Dependencies
 	maps.Copy(dependencies, configJSON.DevDependencies)
 
 	for key, value := range dependencies {
 		if utils.IsGitURL(value) {
-			modulesMap[key] = value
+			reposMap[key] = value
 		}
 	}
 
-	if len(modulesMap) == 0 {
-		utils.LogWarning("no git modules to install.")
+	if len(reposMap) == 0 {
+		utils.LogWarning("no git repos to install.")
 		return
 	}
 
 	if !*safeInstall {
-		modules.RemoveModulesDir()
+		RemoveReposDir()
 	}
 
-	modules.CreateModulesDir()
-	modules.InstallModules(modulesMap, *parallelInstall)
+	CreateReposDir()
+	CloneRepos(reposMap, *parallelInstall)
 }

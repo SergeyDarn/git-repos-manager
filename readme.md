@@ -1,4 +1,4 @@
-# Easy Git Modules Manager
+# Git repositories manager
 
 ## Readable slow install (parallel install off)
 
@@ -19,44 +19,44 @@
 
 ## How it works
 
-1. The list of git repositories to clone is read from the config file (`package.json` by default, can be changed) from `dependencies` and `devDependencies` fields.
-2. All git repositories are cloned into the specified folder (`src/modules` by default, can be changed)
+1. The list of git repositories to clone is read from the config file (`package.json` by default, can be changed) from `dependencies` and `devDependencies` fields. This format was chosen for compatibility with javascript's `package.json` file format.
+2. All git repositories are cloned into the specified folder (`src/repos` by default, can be changed)
 3. Before cloning a repo, the local folder with this repo is deleted if it exists. 
 4. If a repository has unsaved changes, it is skipped so you won't lose any changes
 
 
 ## How to use
 
-> If you're on mac, you can just use already compiled `mod` file from this repo.
+> If you're on mac, you can just use already compiled `build/repo-manager` file from this repo.
 > If you're not on mac:
 > 1. Clone this repo
 > 2. Install go
-> 3. Run `go build -o mod` inside the cloned repo to generate a compiled file for your operating system (instead of `mod` you can use any filename)
+> 3. Run `go build -o build/repo-manger` inside the cloned repo to generate a compiled file for your operating system (instead of `repo-manager` you can use any filename)
 
-1. Copy the `mod` file with the app to the place where you want to manage multiple git repositories.
-2. Copy `go.env` file from this repository to the same place. It contains the environment variables required for the app to run.
-3. You can change any environment variables you want in `go.env` + the app also reads a file `go.env.local`
+1. Copy the `repo-manager` file that contains the app from `build` directory to the place where you want to manage multiple git repositories.
+2. Copy `.env` file from this repository to the same place. It contains the environment variables required for the app to run.
+3. You can change any environment variables you want in `.env` + the app also reads a file `.env.local`
 4. `!Important!` If you're cloning git repositories with ssh - set the path to your ssh key in the env config file.
 5. Create `package.json` with the list of your git repositories (an example of the config file is available few headers lower) 
-6. Run the app to clone all your git repositories: `./mod`
+6. Run the app to clone all your git repositories: `./repo-manager`
 
 ### Final file structure in your project:
-`mod`<br>
+`repo-manager`<br>
 `package.json`<br>
-`go.env`<br>
-`go.env.local` (optional)<br>
+`.env`<br>
+`.env.local` (optional)<br>
 
-## `go.env` config example
+## `.env` config example
 
 ```.env
 CONFIG_FILE="package.json"
-MODULES_DIR="src/modules"
+REPOS_DIR="src/repos"
 SSH_KEY_PATH="/Users/your_username/.ssh/id_rsa"
 SSH_KEY_PASSWORD=""
 ```
 
 `CONFIG_FILE` - the name of the JSON file from which the list of git repositories to clone is read. Inside, the fields `dependencies` and `devDependencies` are used (for compatibility with standart package.json format)<br><br>
-`MODULES_DIR` - relative path to the directory to which git repositories will be cloned. Don't forget to add it to `.gitignore`<br><br>
+`REPOS_DIR` - relative path to the directory to which git repositories will be cloned. Don't forget to add it to `.gitignore`<br><br>
 `SSH_KEY_PATH` - absolute(!) path to your local private ssh key<br>
 `SSH_KEY_PASSWORD` - your ssh key password (if there's none - leave empty)<br>
 
@@ -86,17 +86,17 @@ SSH_KEY_PASSWORD=""
 
 ```bash
     # Help. List all available commands
-    ./mod -h
+    ./repo-manager -h
     # Run the app
-    ./mod 
+    ./repo-manager 
     # Run the app without cloning repositories in parallel. Much slower, but better log readability.
-    ./mod -parallel-install=false
+    ./repo-manager -parallel-install=false
     # Forcibly delete the whole directory with your git repositories before running the app.
-    ./mod -safe-install=false 
+    ./repo-manager -safe-install=false 
     # See the list of git repositories that have unsaved local changes. No repositories are cloned when using this flag
-    ./mod --status
+    ./repo-manager --status
     # Perform git pull for all repositories
-    ./mod --pull
+    ./repo-manager --pull
 ```
 
 ## Usage as a go module
