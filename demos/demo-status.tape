@@ -1,6 +1,6 @@
 Output demo-status.gif
 
-Set FontSize 40
+Set FontSize 35
 Set Width 900
 Set Height 500
 

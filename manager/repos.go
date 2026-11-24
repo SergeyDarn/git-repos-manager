@@ -37,16 +37,16 @@ func CreateReposDir() {
 func RemoveReposDir() {
 	err := os.RemoveAll(getReposDir())
 	utils.CheckError(err, "error while trying to delete repos folder")
-	log.Debug(utils.ColorDanger("repos folder deleted before installation"))
+	log.Debug(utils.ColorDanger("repos folder deleted before cloning"))
 }
 
-func CloneRepos(repos map[string]string, parallelInstall bool) {
+func CloneRepos(repos map[string]string, parallelCloning bool) {
 	log.Infof("cloning repos into %s", getReposDir())
 	fmt.Println()
 
 	start := time.Now()
 
-	if !parallelInstall {
+	if !parallelCloning {
 		for name, url := range repos {
 			cloneRepo(name, url)
 		}
@@ -66,7 +66,7 @@ func CloneRepos(repos map[string]string, parallelInstall bool) {
 	}
 
 	log.Infof(
-		utils.ColorSuccess("installation of %d repos took %s"),
+		utils.ColorSuccess("cloning of %d repos took %s"),
 		len(repos),
 		time.Since(start),
 	)

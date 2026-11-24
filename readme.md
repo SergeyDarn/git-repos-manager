@@ -1,6 +1,6 @@
 # Git repositories manager
 
-## Readable slow install (parallel install off)
+## Readable slow install (parallel cloning off)
 
 <img src="demos/demo-slow.gif" width="700px" />
 
@@ -90,9 +90,9 @@ SSH_KEY_PASSWORD=""
     # Run the app
     ./repo-manager 
     # Run the app without cloning repositories in parallel. Much slower, but better log readability.
-    ./repo-manager -parallel-install=false
+    ./repo-manager --parallel-cloning=false
     # Forcibly delete the whole directory with your git repositories before running the app.
-    ./repo-manager -safe-install=false 
+    ./repo-manager --safe=false 
     # See the list of git repositories that have unsaved local changes. No repositories are cloned when using this flag
     ./repo-manager --status
     # Perform git pull for all repositories

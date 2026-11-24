@@ -34,8 +34,8 @@ func Init(logLevel log.Level) {
 
 	showReposStatus := flag.Bool("status", false, "show repos with unsaved git changes")
 	pullRepos := flag.Bool("pull", false, "perform git pull for all repos")
-	parallelInstall := flag.Bool("parallel-install", true, "clone repos in parallel (true/false)")
-	safeInstall := flag.Bool("safe-install", true, "if this is set to false, repos folder will be deleted on start. Default version - each repo is checked separately, and only if repos has no unsaved changes, it's deleted and then recloned")
+	parallelCloning := flag.Bool("parallel-cloning", true, "clone repos in parallel (true/false)")
+	safe := flag.Bool("safe", true, "if this is set to false, repos folder will be deleted on start. Default version - each repo is checked separately, and only if repos has no unsaved changes, it's deleted and then recloned")
 	flag.Parse()
 
 	if *showReposStatus {
@@ -59,14 +59,14 @@ func Init(logLevel log.Level) {
 	}
 
 	if len(reposMap) == 0 {
-		utils.LogWarning("no git repos to install.")
+		utils.LogWarning("no git repos to clone")
 		return
 	}
 
-	if !*safeInstall {
+	if !*safe {
 		RemoveReposDir()
 	}
 
 	CreateReposDir()
-	CloneRepos(reposMap, *parallelInstall)
+	CloneRepos(reposMap, *parallelCloning)
 }
